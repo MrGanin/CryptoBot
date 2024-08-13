@@ -22,9 +22,9 @@ def values(message: telebot.types.Message):
     bot.send_message(message.chat.id, text)
 
 @bot.message_handler(content_types=['text'])
-def convert(messege: telebot.types.Message):
+def convert(message: telebot.types.Message):
     try:
-        values = messege.text.split(' ')
+        values = message.text.split(' ')
 
         if len(values) != 3:
             raise APIExeption('Неправильно введены параметры.')
@@ -32,12 +32,12 @@ def convert(messege: telebot.types.Message):
         quote, base, amount = values
         total_base = API.get_price(quote, base, amount)*float(amount)
     except APIExeption as e:
-        bot.send_message(messege.chat.id, f'Ошибка пользователя.\n{e}')
+        bot.send_message(message.chat.id, f'Ошибка пользователя.\n{e}')
 
     except Exception as e:
-        bot.send_message(messege.chat.id, f'Не удалось обработать команду.\n{e}')
+        bot.send_message(message.chat.id, f'Не удалось обработать команду.\n{e}')
     else:
         text = f'Цена {amount} {quote} в {base} - {total_base}'
-        bot.send_message(messege.chat.id, text)
+        bot.send_message(message.chat.id, text)
 
 bot.polling()
